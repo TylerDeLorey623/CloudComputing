@@ -1,0 +1,79 @@
+services:  
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    environment:
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_NODE_ID=1
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,CONTROLLER://kafka:29093
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:29093
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+    ports:
+      - "9092:9092"
+    networks:
+      - kafkanet
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - kafka
+      - grafana
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - kafkanet
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    networks:
+      - kafkanet
+
+  proj2:
+    build: .
+    container_name: proj2
+    hostname: proj2
+    environment:
+      ##########
+      # HERE IS WHERE YOU INPUT YOUR DATA
+      API_KEY: b7b924760d238e80f05b51d6ea49f6eb
+      # CAN OVERWRITE FILE AT RUNTIME USING -e FILE='filename.txt'
+      FILE: inputX.txt
+      WORKERS: 5
+      # HERE IS WHERE THE ALERT THRESHOLDS ARE
+      TEMP_LOW: 32
+      TEMP_HIGH: 90
+      HUMIDITY_LOW: 30
+      HUMIDITY_HIGH: 70
+      WIND_SPEED_HIGH: 40
+      ##########
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+      - prometheus
+      - grafana
+    volumes:
+      - prometheus:/data
+    networks:
+      - kafkanet
+
+volumes:
+  prometheus:
+
+networks:
+  kafkanet:
+    driver: bridge

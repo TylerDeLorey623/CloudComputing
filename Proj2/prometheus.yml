@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "proj2"
+    static_configs:
+      - targets: ["proj2:8080"]

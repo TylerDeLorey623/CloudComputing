@@ -1,0 +1,18 @@
+daft punk|10|5
+daft punk|5|1
+daft punk|15|1
+beatles|7|3
+beatles|5|2
+beatles|10|1
+pink floyd|3|10
+pink floyd|5|2
+pink floyd|1|1
+queen|0|5
+queen|2|3
+queen|10|1
+radiohead|7|7
+radiohead|3|2
+radiohead|10|1
+nirvana|5|5
+nirvana|5|1
+nirvana|7|3

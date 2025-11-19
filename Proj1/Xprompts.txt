@@ -1,0 +1,10 @@
+music|3|9
+bitcoin|2|20
+hello world|5|2
+america|2|5
+golang|3|15
+meaning of life|7|12
+breaking news|1|8
+sports|4|10
+weather|2|7
+technology|6|25

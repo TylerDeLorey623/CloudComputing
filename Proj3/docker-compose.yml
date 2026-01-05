@@ -4,16 +4,18 @@ services:
     container_name: proj3
     environment:
       - BASE_URL=http://host.docker.internal:12434/engines/llama.cpp/v1/
-      - MODEL=ai/smollm2:latest 
+      - MODEL=ai/llama3.2:latest
 
-      - LLM_ZERO=Muslim
-      - LLM_ONE=Catholic
-      - TOPIC=Eating pork
-    depends_on:
-      - llm 
+      - LLM_ONE_RELIGION=Agnostic
+      - LLM_TWO_RELIGION=Atheist
+      - TOPIC=Existence of Higher Power
+      - TURNS=4
+      - SENTENCES=3
+    volumes:
+      - ./:/app/output
   
   llm:
     provider:
       type: model
       options: 
-        model: ai/smollm2:latest
+        model: ai/llama3.2:latest
